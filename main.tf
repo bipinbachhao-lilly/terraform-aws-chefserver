@@ -61,6 +61,10 @@ resource "aws_instance" "ChefServerInstance" {
   subnet_id              = tolist(data.aws_subnet_ids.public.ids)[0]
   key_name               = var.key_name
   user_data              = templatefile("${path.module}/cloudinit_conf.tpl", { workspaces = "workspaces" })
+  root_block_device {
+    delete_on_termination = true
+    volume_size = var.root_volume_size
+  }
   tags = merge(
     var.hcs_mandatory_tags,
     {
@@ -73,4 +77,12 @@ resource "aws_instance" "ChefServerInstance" {
       "Name" = "CHEF-SERVER"
     }
   )
+}
+
+resource "null_resource" "chef_server_config" {
+  connection {
+    type = "ssh"
+    user = replace(var.platform, "/ubuntu-.*/", "ubuntu") == "ubuntu" ? "ubuntu" : "ec2-user"
+    host = aws_instance.ChefServerInstance.public_ip
+  }
 }

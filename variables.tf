@@ -19,6 +19,12 @@ variable "key_name" {
   description = "SSH key for Chef-Server Instance"
 }
 
+variable  "root_volume_size"  {
+  type = number
+  description = "Size of root volume"
+  default = 50
+}
+
 variable "hcs_mandatory_tags" {
   description = "HCS mandatory tags"
   type        = map(string)

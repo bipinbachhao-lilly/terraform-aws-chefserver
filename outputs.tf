@@ -9,3 +9,7 @@ output "public_ipv4_address" {
 output "public_ipv4_dns" {
   value = aws_instance.ChefServerInstance.public_dns
 }
+
+output "ssh_username" {
+  value = replace(var.platform, "/ubuntu-.*/", "ubuntu") == "ubuntu" ? "ubuntu" : "ec2-user"
+}
