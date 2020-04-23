@@ -9,6 +9,10 @@ output:
         - ">> /var/log/cloud-final.out"
         - "/var/log/cloud-final.err"
 
+packages:
+    -  wget
+    -  curl
+
 runcmd:
  - [ sh, -c, "Setting up AWS System Manager: echo $(hostname)" ]
  - [ sh, -c, sudo systemctl enable amazon-ssm-agent ]

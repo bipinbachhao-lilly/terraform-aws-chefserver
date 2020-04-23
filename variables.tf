@@ -19,6 +19,11 @@ variable "key_name" {
   description = "SSH key for Chef-Server Instance"
 }
 
+variable "key_path" {
+  type  = string
+  description = "SSH Key Path to login"
+}
+
 variable  "root_volume_size"  {
   type = number
   description = "Size of root volume"

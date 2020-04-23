@@ -83,6 +83,50 @@ resource "null_resource" "chef_server_config" {
   connection {
     type = "ssh"
     user = replace(var.platform, "/ubuntu-.*/", "ubuntu") == "ubuntu" ? "ubuntu" : "ec2-user"
+    private_key = file(var.key_path)
     host = aws_instance.ChefServerInstance.public_ip
   }
+
+  provisioner "file" {
+    source      = "${path.module}/files/chef-server.rb"
+    destination = "/tmp/chef-server.rb"
+  }
+
+  provisioner "file" {
+    source      = "${path.module}/files/dhparam.pem"
+    destination = "/tmp/dhparam.pem"
+  }
+
+   # install chef-server
+  provisioner "remote-exec" {
+    inline = [
+      "set -evx",
+      "echo -e '\nBEGIN INSTALL CHEF SERVER\n'",
+      "curl -vo /tmp/install.sh https://omnitruck.chef.io/install.sh",
+      "sudo chmod 755 /tmp/install.sh",
+      "sudo /tmp/install.sh -P chef-server -c stable",
+      "sudo chown root:root /tmp/chef-server.rb",
+      "sudo chown root:root /tmp/dhparam.pem",
+      "sudo mv /tmp/chef-server.rb /etc/opscode",
+      "sudo mv /tmp/dhparam.pem /etc/opscode",
+      "sudo chef-server-ctl reconfigure --chef-license=accept",
+      "sleep 120",
+      "echo -e '\nEND INSTALL CHEF SERVER\n'",
+    ]
+  }
+
+   # install chef-server
+  provisioner "remote-exec" {
+    inline = [
+      "set -evx",
+      "echo -e '\nBEGIN INSTALL CHEF MANAGE ADDON\n'",
+      "sudo chef-server-ctl install chef-manage",
+      "sudo chef-server-ctl reconfigure --chef-license=accept",
+      "sleep 30",
+      "sudo chef-manage-ctl reconfigure --accept-license",
+      "sleep 120",
+      "echo -e '\nEND INSTALL CHEF SERVER\n'",
+    ]
+  }
+
 }
