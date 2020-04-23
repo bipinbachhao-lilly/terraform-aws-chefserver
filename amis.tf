@@ -3,15 +3,15 @@ data "aws_ami" "rhel_7" {
   most_recent = true
   filter {
     name   = "name"
-    vaules = ["RHEL-7"]
+    values = ["RHEL-7*"]
   }
   filter {
     name   = "architecture"
-    vaules = ["x86_64"]
+    values = ["x86_64"]
   }
   filter {
     name   = "virtualization-type"
-    vaules = ["hvm"]
+    values = ["hvm"]
   }
   owners = ["309956199498"]
 }

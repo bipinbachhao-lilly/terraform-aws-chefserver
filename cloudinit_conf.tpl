@@ -18,11 +18,3 @@ runcmd:
 
  # Note: Don't write files to /tmp from cloud-init use /run/somedir instead.
  # Early boot environments can race systemd-tmpfiles-clean LP: #1707222.
-
-write_files:
-  - path: /etc/nginx/workspaces
-    owner: root:root
-    content: |
-      %{ for workspace in workspaces ~}
-      server ${workspace}:8443;
-      %{ endfor ~}

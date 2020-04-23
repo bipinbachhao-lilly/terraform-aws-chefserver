@@ -1,9 +1,9 @@
-variable "name" {
+variable "instance_name" {
   type        = string
   description = "Name of the instance to be created."
 }
 
-variable "aws_instance_type" {
+variable "instance_type" {
   type        = string
   description = "Name of the AWS instance type used to determine size of instances."
   default     = "t3.medium"
@@ -14,14 +14,9 @@ variable "platform" {
   description = "Operating System of the instance to be created."
 }
 
-variable "target_group_arn" {
-  type        = string
-  description = ""
-}
-
 variable "key_name" {
   type        = string
-  description = "SSH key for DCV instances"
+  description = "SSH key for Chef-Server Instance"
 }
 
 variable "hcs_mandatory_tags" {
