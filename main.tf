@@ -107,7 +107,7 @@ resource "null_resource" "chef_server_config" {
       "sudo /tmp/install.sh -P chef-server -c stable",
       "sudo chown root:root /tmp/chef-server.rb",
       "sudo chown root:root /tmp/dhparam.pem",
-      "sudo mv /tmp/chef-server.rb /etc/opscode",
+      "sudo mv /tmp/chef-server.rb /etc/opscode/tmp-chef-server.rb",
       "sudo mv /tmp/dhparam.pem /etc/opscode",
       "sudo chef-server-ctl reconfigure --chef-license=accept",
       "sleep 120",
@@ -115,7 +115,7 @@ resource "null_resource" "chef_server_config" {
     ]
   }
 
-   # install chef-server
+   # install chef-manage
   provisioner "remote-exec" {
     inline = [
       "set -evx",
